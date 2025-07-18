@@ -1,106 +1,227 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-      ),
-      home: const MyHomePage(title: '구구단 화면'),
-    );
-  }
-}
+  final Map info = {
+    'appTitle': 'StatelessWidget Demo',
+    'appBarTitle': 'Flutter Official Site',
+    'titleImageLink':
+        'http://storage.googleapis.com/cms-storage-bucket/2f118a9971e4ca6ad737.png',
+    'titleSectionHeader': 'Flutter on Mobile',
+    'titleSectionBody': 'http://flutter.dev/multi-platform/mobile',
+    'titleSectionScore': 100,
+    'textSection':
+        'Bring tour app idea to more users from day one by building sith Flutter on iOS and Adnroid simultaneously, without sacrificing feature, quality, or performance. All mobile on day one: in both ecosysytems from a single codebase. One experience: Release simultaneously on iOS and Android with feature parity for the best experience for all users.',
+  };
 
-// StatefulWidget은 별다른 기능 없이 사용자가 값을 계속 변경할 수 있게 하는
-// State 를 생성하는 기능만 가지고 있다.
-class MyHomePage extends StatefulWidget {
-  // MyHomePage 클래스의 생성자
-  const MyHomePage({super.key, required this.title});
-
-  // 인스턴스 변수
-  final String title;
-
-  // 사용자가 앱 사용 중 계속해서 값을 변경할 수 있는 State를 생성할 수 있게 해주는 함수
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-// State<MyHomePage> : MyHomePage 라는 클래스의 State 입니다. 라는 것을 명시해주는 것
-class _MyHomePageState extends State<MyHomePage> {
-  // 인스턴스 변수 (사용자가 앱에서 실제로 변경할 수 있는 값)
-  int _counter = 0;
-
-  // _incrementCounter() : State 클래스 내에서 사용할 수 있는 기능(함수)
-  void _incrementCounter() {
-    // setState :  이 클래스에서 가지고 있는 인스턴스 변수의 값을 바꿀 때 사용하는 기능(함수)
-    setState(() {
-      _counter++;
-    });
+  Image _buildTitleImage(String imageName) {
+    return Image.network(imageName, width: 600, height: 240, fit: BoxFit.cover);
   }
 
-  // upperCamelCase 가 무엇인가?
-  // 항상 식별자의 첫번째 문자는 대문자로 표기 해야하며, 만약 여러단어가 포함되어 있는 경우라면 각 단어를 구분짓게 하기 위해 마찬가지로 대문자로
-  // 사용방법 : (숫자 더하기 라는 기능을 하는 함수 이름을 짓고싶다.) add + number
-  // upperCamelCase 사용 시 : AddNumber
-  // lowerCamelCase 사용 시 : addNumber
-
-  // 빼기를 할 수 있는 기능
-  void decrementCounter() {
-    setState(() {
-      _counter--;
-    });
-  }
-
-  // State 로 선언된 클래스는 현재 내가 가지고 있는 값을 어떻게 반환할건지
-  // build() 기능을 통해서 외부(StatefulWidget인 MyHomePage)로 전달해주어야 함.
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Center(child: Text(widget.title)),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-
-      //  이 부분을 수정해서 왼쪽 버튼을 누루면 -, 오른쪽 버튼을 누르면 + 하는 기능 추가
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+  Container _buildTitleSection(String name, String addr, int count) {
+    return Container(
+      padding: const EdgeInsets.all(32),
+      child: Row(
         children: [
-          FloatingActionButton(
-            onPressed: decrementCounter,
-            tooltip: 'Decrement',
-            child: const Text("-"),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text(
+                    name,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Text(addr, style: TextStyle(color: Colors.grey[500])),
+              ],
+            ),
           ),
-          // 빈 칸을 뜻하는 클래스를 하나 추가할 수도 있음 : Padding
-          Padding(padding: EdgeInsetsGeometry.all(10)),
-          FloatingActionButton(
-            onPressed: _incrementCounter,
-            tooltip: 'Increment',
-            child: const Icon(Icons.add),
-          ),
+          const Counter(),
         ],
       ),
     );
   }
+
+  Widget _buildButtonSection(Color color) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildButtonColumn(color, Icons.assistant_navigation, 'Visit'),
+        _buildButtonColumn(color, Icons.add_alert_sharp, 'Alarm'),
+        _buildButtonColumn(color, Icons.share, 'Share'),
+      ],
+    );
+  }
+
+  Column _buildButtonColumn(Color color, IconData icon, String label) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [ColorChanger(color: color, icon: icon, label: label)],
+    );
+  }
+
+  Container _buildTextSection(String section) {
+    return Container(
+      padding: const EdgeInsets.all(32),
+      child: Text(
+        section,
+        softWrap: true,
+        textAlign: TextAlign.justify,
+        style: const TextStyle(height: 1.5, fontSize: 15),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final titleImage = _buildTitleImage(info['titleImageLink']);
+    Widget textSection = _buildTextSection(info['textSection']);
+    // 다크 테마 / 화이트 테마
+    Widget buttonSection = _buildButtonSection(Theme.of(context).primaryColor);
+    Widget titleSection = _buildTitleSection(
+      info['titleSectionHeader'],
+      info['titleSectionBody'],
+      info['titleSectionScore'],
+    );
+
+    return MaterialApp(
+      title: info['appTitle'],
+      home: Scaffold(
+        appBar: AppBar(title: Text(info['appBarTitle'])),
+        body: ListView(
+          children: [titleImage, titleSection, buttonSection, textSection],
+        ),
+      ),
+    );
+  }
 }
 
-// dddfdwfdadf
+class ColorChanger extends StatefulWidget {
+  // 생성자(얘가 어떤 역할을 하는지 key 로 구분하는 용도. 굳이 작성 안해도 됨)
+  ColorChanger({
+    super.key,
+    required Color color,
+    required IconData icon,
+    required String label,
+  }) {
+    inputColor = color;
+    inputIcon = icon;
+    inputLabel = label;
+  }
+
+  late Color inputColor;
+  late IconData inputIcon;
+  late String inputLabel;
+
+  @override
+  State<ColorChanger> createState() =>
+      ColorState(color: inputColor, icon: inputIcon, label: inputLabel);
+}
+
+class ColorState extends State<ColorChanger> {
+  ColorState({
+    required Color color,
+    required IconData icon,
+    required String label,
+  }) {
+    _statusColor = color;
+    _icon = icon;
+    _label = label;
+  }
+
+  //
+  // 사용자가 이 아이콘을 눌렀는지에 대한 상태를 저장하는 변수
+  bool _boolStatus = false;
+  // 현재 상태에 따른 변경될 아이콘의 색에 대한 상태를 저장하는 변수
+  Color _statusColor = Colors.deepPurpleAccent;
+  late IconData _icon;
+  late String _label;
+
+  // 실제로 State 에 저장된 상태를 변경해줄 수 있는 함수
+  // = 사용자가 아이콘 버튼을 눌렀을 때 동작할 함수
+  void _buttonPressed() {
+    // State 를 변경하는 코드 작성
+    setState(() {
+      if (_boolStatus == true) {
+        _boolStatus = false;
+        _statusColor = Colors.deepPurpleAccent;
+      } else {
+        _boolStatus = true;
+        _statusColor = Colors.orange;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        IconButton(
+          icon: Icon(_icon),
+          color: _statusColor,
+          onPressed: _buttonPressed,
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 8),
+          child: Text(
+            _label,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w400,
+              color: _statusColor,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class Counter extends StatefulWidget {
+  const Counter({Key? key}) : super(key: key);
+
+  @override
+  State<Counter> createState() => CounterState();
+}
+
+class CounterState extends State<Counter> {
+  int _counter = 0;
+  bool _boolStatus = false;
+  Color _statusColor = Colors.black;
+
+  void _buttonPressed() {
+    setState(() {
+      if (_boolStatus == true) {
+        _boolStatus = false;
+        _counter--;
+        _statusColor = Colors.black;
+      } else {
+        _boolStatus = true;
+        _counter++;
+        _statusColor = Colors.red;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        IconButton(
+          icon: const Icon(Icons.star),
+          color: _statusColor,
+          onPressed: _buttonPressed,
+        ),
+        Text('$_counter'),
+      ],
+    );
+  }
+}
