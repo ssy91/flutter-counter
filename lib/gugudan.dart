@@ -11,10 +11,10 @@ import 'package:flutter/material.dart';
 // 1 x 9 = 9
 
 void main() {
-  runApp(MyApp());
+  runApp(Gugudan());
 }
 
-class MyApp extends StatelessWidget {
+class Gugudan extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 구구단 작성할 수 있는 기능 만들기!

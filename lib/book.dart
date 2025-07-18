@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 // import 'package:flutter/cupertino.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(Book());
 }
 
-class MyApp extends StatelessWidget {
+class Book extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final storeName = const Text(
